@@ -11,32 +11,10 @@ const Animations = () => {
   const isMiniIpad = useMediaQuery({ maxWidth: "835px" });
   const isIpad = useMediaQuery({ maxWidth: "1015px" });
   const containerRef = useRef(null);
-  const [navBottom, setNavBottom] = useState(0);
   const [activeSection, setActiveSection] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
- 
-  const getNavBottom = () => {
-    const val = getComputedStyle(document.documentElement).getPropertyValue(
-      "--nav-bottom",
-    );
-    return val ? parseFloat(val) : 0;
-  };
-  useEffect(() => {
-    const updateOffset = () => {
-      const navHeight = getNavBottom();
-      setNavBottom(navHeight);
 
-      if (containerRef.current) {
-        containerRef.current.style.paddingTop = `${navHeight}px`;
-      }
-    };
-
-    updateOffset();
-
-    window.addEventListener("resize", updateOffset);
-    return () => window.removeEventListener("resize", updateOffset);
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -78,7 +56,7 @@ const Animations = () => {
   return (
     <div
       ref={containerRef}
-      style={{ paddingTop: `${navBottom + 20}px` }}
+        style={{ paddingTop: "clamp(50px, 9vw, 100px)" }}
       className="animations-container"
     >
       {/* Ambient light effect */}
