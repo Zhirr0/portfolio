@@ -1,3 +1,4 @@
+
 :root {
   --hover-image-trail-bg-main-dark: #1e1e1e;
   --hover-image-trail-bg-main-light: #fcfcfc;
@@ -7,14 +8,14 @@
 }
 
 .hover-image-trail {
-  font-family: fantasy;
+  font-family: sans-serif;
   background: var(--hover-image-trail-bg-main-dark);
 }
 
 .hover-image-trail-hero h1 {
   color: var(--hover-image-trail-text-light);
   font-size: 5vw;
-  font-weight: 500;
+  font-weight: 900;
   user-select: none;
   text-transform: uppercase;
   text-align: center;
