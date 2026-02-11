@@ -15,37 +15,9 @@ const Hero = () => {
   const headerRef = useRef(null);
   const paragraphRef = useRef(null);
   const heroTextRef = useRef(null);
-  const [navBottom, setNavBottom] = useState(0);
   const isIpad = useMediaQuery({ maxWidth: "1015px" });
   const isMiniIpad = useMediaQuery({ maxWidth: "835px" });
   const isPhone = useMediaQuery({ maxWidth: "630px" });
-
-  const getNavBottom = () => {
-    const val = getComputedStyle(document.documentElement).getPropertyValue(
-      "--nav-bottom",
-    );
-    return val ? parseFloat(val) : 0;
-  };
-
-  useEffect(() => {
-    const updateOffset = () => {
-      const navHeight = getNavBottom();
-      setNavBottom(navHeight);
-
-      if (heroTextRef.current) {
-        heroTextRef.current.style.paddingTop = `${navHeight}px`;
-      }
-    };
-
-    // Initial calculation
-    updateOffset();
-
-    // Recalculate on resize
-    window.addEventListener("resize", updateOffset);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", updateOffset);
-  }, []);
 
   useGSAP(
     () => {
@@ -86,20 +58,14 @@ const Hero = () => {
     },
     { scope: heroRef, dependencies: [] },
   );
-  const paddingTop = isPhone
-    ? navBottom + 10
-    : isMiniIpad
-      ? navBottom + 13
-      : isIpad
-        ? navBottom + 13
-        : navBottom + 20;
+  const paddingTop = isPhone ? 10 : isMiniIpad ? 15 : isIpad ? 20 : 0;
 
   return (
     <section ref={heroRef} className="hero relative">
       <div
         ref={heroTextRef}
         className="hero-text flex flex-col -gap-10"
-        style={{ paddingTop: `${paddingTop}px` }}
+        style={{ paddingTop: "clamp(50px, 9vw, 100px)" }}
       >
         <div ref={headerRef} className="hero-header">
           <h1 className="text-header">
@@ -110,9 +76,10 @@ const Hero = () => {
 
         <div ref={paragraphRef} className="hero-paragraph">
           <p className="text-paragraph">
-            Building modern, high-performance websites with motion,
-            focused on performance, animation, and interaction. Powered by React,
-            GSAP, Motion, and TailwindCSS. Trying to reach awwward-winning website level.
+            Building modern, high-performance websites with motion, focused on
+            performance, animation, and interaction. Powered by React, GSAP,
+            Motion, and TailwindCSS. Trying to reach awwward-winning website
+            level.
           </p>
         </div>
       </div>
