@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Aoboshi+One&family=BBH+Sans+Bartle&family=DM+Serif+Display:ital@0;1&family=Heebo:wght@800&family=Pacifico&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+FR+Trad:wght@100..400&display=swap");
+
+.text-hover-clippath-section {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
+  background: #eaeaea;
+}
+
+.text-hover-clippath-header {
+  font-size: 3rem;
+  line-height: 1;
+  color: #eaeaea;
+}
+
+.text-hover-clippath-paragraph {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.text-hover-clippath-footer {
+  position: fixed;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+.text-hover-clippath-footer {
+  bottom: 0;
+}
+
+.text-hover-clippath-clients {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 2rem;
+  overflow: hidden;
+}
+
+.text-hover-clippath-clients-preview {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 65%;
+  height: 75%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.client-img-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  will-change: clip-path;
+  overflow: hidden;
+}
+
+.client-img-wrapper img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, opacity;
+}
+
+.text-hover-clippath-client-list {
+  position: relative;
+  width: 80%;
+  margin-bottom: 8rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  mix-blend-mode: difference;
+  z-index: 2;
+}
+
+.text-hover-clippath-client-name {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+.text-hover-clippath-client-name::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.15rem;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease-out;
+}
+
+.text-hover-clippath-client-name:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (max-width: 56.25rem) {
+  .text-hover-clippath-header {
+    font-size: 2rem;
+  }
+
+  .text-hover-clippath-clients-preview {
+    width: 100%;
+    height: 100%;
+  }
+  .text-hover-clippath-client-list {
+    width: 100%;
+  }
+}

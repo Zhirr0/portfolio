@@ -1,0 +1,25 @@
+@import "tailwindcss";
+.github-svg {
+@apply absolute
+  scale-50
+  sm:scale-60
+  md:scale-70
+  lg:scale-90
+  xl:scale-100
+  -top-[55%]
+  md:-top-1/2
+  lg:-top-[60%]
+  -right-20
+  md:right-0
+  lg:right-0
+  -translate-x-1/2
+  -translate-y-1/2;
+
+}
+.github-svg:focus {
+  @apply border-none outline-none;
+}
+
+.github-svg:focus-visible {
+  @apply border-none outline-none;
+}

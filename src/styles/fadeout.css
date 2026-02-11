@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+.fadeout {
+  @apply h-[50svh] flex flex-col items-center justify-center overflow-hidden;
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 15%,
+    rgba(0, 0, 0, 1) 85%,
+    rgba(0, 0, 0, 0)
+  );
+
+  .outer-wrapper {
+    @apply flex items-center justify-center h-[300px] w-screen mb-8 absolute;
+
+    &.rotate172 {
+      transform: rotateZ(179deg);
+      @apply z-1 -mt-[100px];
+    }
+
+    &.rotate2 {
+      transform: rotateZ(2deg);
+      @apply z-[-100] opacity-[0.15] mt-[200px];
+    }
+
+    .wrapper {
+      @apply w-full max-w-[1536px] mx-auto relative inline-flex justify-center items-center h-[300px] overflow-visible;
+
+      .item {
+        @apply w-[180px] h-[250px] bg-[#242424] text-white rounded-md absolute flex justify-center text-center items-center;
+        left: max(calc(180px * 12), 100%);
+        animation: scrollLeft 30s linear infinite;
+      }
+
+      .item1 {
+        animation-delay: calc(30s / 12 * (12 - 1) * -1);
+      }
+
+      .item2 {
+        animation-delay: calc(30s / 12 * (12 - 2) * -1);
+      }
+
+      .item3 {
+        animation-delay: calc(30s / 12 * (12 - 3) * -1);
+      }
+
+      .item4 {
+        animation-delay: calc(30s / 12 * (12 - 4) * -1);
+      }
+
+      .item5 {
+        animation-delay: calc(30s / 12 * (12 - 5) * -1);
+      }
+
+      .item6 {
+        animation-delay: calc(30s / 12 * (12 - 6) * -1);
+      }
+
+      .item7 {
+        animation-delay: calc(30s / 12 * (12 - 7) * -1);
+      }
+
+      .item8 {
+        animation-delay: calc(30s / 12 * (12 - 8) * -1);
+      }
+
+      .item9 {
+        animation-delay: calc(30s / 12 * (12 - 9) * -1);
+      }
+
+      .item10 {
+        animation-delay: calc(30s / 12 * (12 - 10) * -1);
+      }
+
+      .item11 {
+        animation-delay: calc(30s / 12 * (12 - 11) * -1);
+      }
+
+      .item12 {
+        animation-delay: calc(30s / 12 * (12 - 12) * -1);
+      }
+    }
+  }
+}

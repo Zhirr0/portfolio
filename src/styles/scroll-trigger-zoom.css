@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Titan+One&display=swap");
+@import "tailwindcss";
+.scroll-trigger-zoom-section {
+  font-family: "Titan One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  width: 100vw;
+  min-height: 100svh;
+  overflow-x: hidden;
+}
+
+.scroll-trigger-zoom-controls {
+  @apply left-[37%] sm:left-[20%] md:left-[17%] lg:left-[13%];
+  position: fixed;
+  bottom: 0.5rem;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: flex;
+  gap: 0.625rem;
+}
+.scroll-trigger-zoom-button {
+  @apply whitespace-nowrap;
+  cursor: pointer;
+
+  font-size: clamp(10px, 1.2vw, 1.125rem);
+  letter-spacing: 0.05em;
+
+  /* Responsive spacing */
+  padding: clamp(8px, 1.5vw, 10px) clamp(16px, 2.5vw, 20px);
+
+  border: 2px solid #141414;
+  border-radius: clamp(4px, 0.6vw, 5px);
+  background: #eee;
+  color: #141414;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.scroll-trigger-zoom-button-active {
+  background: #141414;
+  color: #eee;
+}
+
+.scroll-trigger-zoom-content {
+  width: 100%;
+}
+
+.scroll-trigger-zoom-container {
+  min-height: 100svh;
+  position: relative;
+}
+
+.scroll-trigger-zoom-mask {
+  height: 100svh;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  mix-blend-mode: screen;
+}
+
+.scroll-trigger-zoom-mask-title {
+  font-size: 80px;
+  transform-origin: 55% 50%;
+}
+
+.scroll-trigger-zoom-image {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}

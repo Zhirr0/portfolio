@@ -1,0 +1,11 @@
+    <svg
+      className="absolute top-[50%] left-[53%] scale-60 -translate-x-1/2 -translate-y-1/2"
+      viewBox="0 0 42 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M40.5 21.191C42.5 22.3457 42.5 25.2324 40.5 26.3871L4.5 47.1717C2.5 48.3265 0 46.8831 0 44.5737L0 3.00445C0 0.69505 2.5 -0.748324 4.5 0.406376L40.5 21.191Z"
+        fill="#141414"
+      />
+    </svg>

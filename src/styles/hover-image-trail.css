@@ -1,0 +1,51 @@
+:root {
+  --hover-image-trail-bg-main-dark: #1e1e1e;
+  --hover-image-trail-bg-main-light: #fcfcfc;
+
+  --hover-image-trail-text-light: #eee;
+  --hover-image-trail-text-dark: #1e1e1e;
+}
+
+.hover-image-trail {
+  font-family: fantasy;
+  background: var(--hover-image-trail-bg-main-dark);
+}
+
+.hover-image-trail-hero h1 {
+  color: var(--hover-image-trail-text-light);
+  font-size: 5vw;
+  font-weight: 500;
+  user-select: none;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hover-image-trail-hero,
+.hover-image-trail-main {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hover-image-trail-main {
+  background: var(--hover-image-trail-bg-main-light);
+}
+
+.hover-image-trail-main h1 {
+  color: var(--hover-image-trail-text-dark);
+}
+
+.trail-img {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  object-fit: coverr;
+  border-radius: 4px;
+  transform: center;
+  pointer-events: none;
+  will-change: transform;
+}

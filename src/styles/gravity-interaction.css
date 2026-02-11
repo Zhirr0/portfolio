@@ -1,0 +1,33 @@
+
+canvas {
+  display: block;
+  cursor: none;
+}
+
+/* Gravity Well Mode - Inward Spiral */
+@keyframes gravityPull {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(0.85) rotate(360deg);
+  }
+}
+
+/* Repulsion Mode - Outward Spiral */
+@keyframes repulsionPush {
+  0% {
+    transform: scale(0.85) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(-360deg);
+  }
+}
+
+.gravity-ring {
+  animation: gravityPull 3s ease-in-out infinite alternate;
+}
+
+.repulsion-ring {
+  animation: repulsionPush 3s ease-in-out infinite alternate;
+}

@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Antonio:wght@100..700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-milk: #faeade;
+  --color-reveal-fade-bg: #1a0e0c;
+  --color-reveal-fade-header: #faeade10;
+}
+
+.text-reveal-fade-message-content {
+  @apply bg-reveal-fade-bg
+           text-milk 
+           min-h-svh 
+           overflow-visible 
+           flex 
+           justify-center 
+           items-center 
+           relative 
+           z-20;
+
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+  .text-reveal-fade-message-content-header {
+    @apply absolute text-milk text-4xl md:text-5xl lg:text-7xl -top-15 lg:-top-30 left-5;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .text-reveal-fade-container {
+    @apply mx-auto flex justify-center items-center py-28 relative;
+    width: 100%;
+    height: 100%;
+
+    .text-reveal-fade-wrapper {
+      @apply w-full h-full;
+
+      .text-reveal-fade-msg-wrapper {
+        @apply 2xl:text-[8.5rem] 
+                 md:text-8xl 
+                 text-5xl 
+                 font-bold 
+                 uppercase 
+                 leading-[9vw] 
+                 tracking-[-.35vw] 
+                 flex 
+                 flex-col 
+                 justify-center 
+                 items-center 
+                 md:gap-24 
+                 gap-14;
+
+        .text-reveal-fade-first-message {
+          @apply text-4xl
+          sm:text-5xl
+
+          md:text-7xl
+          tracking-tight
+          w-full
+          md:w-[90%]
+                   text-center  
+                   text-reveal-fade-header
+                   leading-none;
+        }
+      }
+    }
+  }
+}

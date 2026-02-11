@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
+@import "tailwindcss";
+
+.text-reveal-clippath-container {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: #1a0e0c;
+  font-style: normal;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-reveal-clippath-top-to-bottom {
+  min-height: 100svh;
+}
+
+.text-reveal-clippath-height {
+  height: 100svh;
+}
+
+.text-reveal-clippath-container-header {
+  position: absolute;
+  color: #faeade;
+  top: -7.5rem;
+  left: 1.25rem;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: center;
+}
+
+.text-reveal-clippath-about {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.text-reveal-clippath-services {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-reveal-clippath-services-header {
+  position: relative;
+  width: 100%;
+  padding: 0 2rem;
+  background: #24120f;
+  will-change: transform;
+}
+
+.text-reveal-clippath-services-header img {
+  object-fit: contain;
+}
+
+.text-reveal-clippath-services-header:nth-child(1),
+.text-reveal-clippath-services-header:nth-child(3) {
+  transform: translateX(100%) translateY(0%);
+  -webkit-transform: translateX(100%) translateY(0%);
+  -moz-transform: translateX(100%) translateY(0%);
+  -ms-transform: translateX(100%) translateY(0%);
+  -o-transform: translateX(100%) translateY(0%);
+}
+
+.text-reveal-clippath-services-header:nth-child(2) {
+  transform: translateX(-100%) translateY(0%);
+  z-index: 2;
+  -webkit-transform: translateX(-100%) translateY(0%);
+  -moz-transform: translateX(-100%) translateY(0%);
+  -ms-transform: translateX(-100%) translateY(0%);
+  -o-transform: translateX(-100%) translateY(0%);
+}
+
+.text-reveal-clippath-services-copy {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-top: 155svh;
+  padding: 2rem 2rem 25svh 2rem;
+  text-align: center;
+}
+
+.text-reveal-clippath-animate-text {
+  @apply text-xl sm:text-5xl;
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+  line-height: 1.2;
+  color: #ffffff20;
+  --clip-value: 100%;
+}
+
+@media (max-width: 768px) {
+  .text-reveal-clippath-animate-text {
+    line-height: 1.5;
+  }
+}
+
+.text-reveal-clippath-animate-text::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  clip-path: inset(0 0 var(--clip-value) 0);
+  will-change: clip-path;
+}
+
+@media (max-width: 1000px) {
+  .text-reveal-clippath-container-header {
+    font-size: 2rem;
+    letter-spacing: -0.8px;
+  }
+
+  .text-reveal-clippath-animate-text {
+    width: 100%;
+  }
+}

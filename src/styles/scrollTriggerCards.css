@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Titan+One&display=swap');
+
+:root {
+  --scroll-trigger-cards-accent-1: #b1c0ef;
+  --scroll-trigger-cards-accent-2: #f2acac;
+  --scroll-trigger-cards-accent-3: #fedd93;
+  --scroll-trigger-cards-accent-4: #81b7bf;
+  --scroll-trigger-cards-bg-hero-footer: #f9f4eb;
+  --scroll-trigger-cards-text-color: #141414;
+  --scroll-trigger-cards-sticky-cards-bg: #0f0f0f;
+}
+
+.scroll-trigger-cards-wrapper {
+  font-family: "Titan One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.scroll-trigger-cards-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scroll-trigger-cards-hero-title,
+.scroll-trigger-cards-footer {
+  text-transform: uppercase;
+  font-family: "Barlow Condensed";
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.scroll-trigger-cards-hero,
+.scroll-trigger-cards-footer {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--scroll-trigger-cards-bg-hero-footer);
+  color: var(--scroll-trigger-cards-text-color);
+}
+
+.scroll-trigger-cards-sticky-cards {
+  position: relative;
+  width: 100vw;
+  background: var(--scroll-trigger-cards-sticky-cards-bg);
+}
+
+.scroll-trigger-card {
+  position: sticky;
+  width: 100%;
+  height: 125svh;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.scroll-trigger-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform-origin: 50% 100%;
+  will-change: transform;
+  text-align: center;
+}
+
+.scroll-trigger-card-1 .scroll-trigger-card-inner {
+  background: var(--scroll-trigger-cards-accent-1);
+}
+
+.scroll-trigger-card-2 .scroll-trigger-card-inner {
+  background: var(--scroll-trigger-cards-accent-2);
+}
+
+.scroll-trigger-card-3 .scroll-trigger-card-inner {
+  background: var(--scroll-trigger-cards-accent-3);
+}
+
+.scroll-trigger-card-4 .scroll-trigger-card-inner {
+  background: var(--scroll-trigger-cards-accent-4);
+}
+
+.scroll-trigger-card-info {
+  width: 25%;
+  padding: 4rem;
+  text-align: left;
+}
+
+.scroll-trigger-card-info-text {
+  font-size: 0.9rem;
+}
+
+.scroll-trigger-card-title-text {
+  font-size: 3rem;
+  padding: 2rem 0;
+}
+
+.scroll-trigger-card-description {
+  width: 60%;
+  margin: 0 auto 2em auto;
+}
+
+.scroll-trigger-card-description-text {
+  font-size: 1.5rem;
+}
+
+.scroll-trigger-cards-image-container {
+  width: 100%;
+  height: 100%;
+  margin-top: 4em;
+  overflow: hidden;
+}
+
+.scroll-trigger-card-inner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: var(--scroll-trigger-cards-after-opacity, 0);
+  will-change: opacity;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 1000px) {
+  .scroll-trigger-card-description {
+    width: calc(100% - 4rem);
+    font-size: 3rem;
+    margin: 0 auto;
+  }
+
+  .scroll-trigger-card-info {
+    width: 75%;
+    margin: 0 auto;
+    padding: 4em 2em;
+    text-align: center;
+  }
+
+  .scroll-trigger-card-title-text {
+    font-size: 3rem;
+  }
+
+  .scroll-trigger-card-description-text {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,247 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --hover-clippath-bg-main: #141414;
+  --hover-clippath-text-main: #fafafa;
+
+  --hover-clippath-text-muted-40: rgba(250, 250, 250, 0.4);
+  --hover-clippath-text-muted-50: rgba(250, 250, 250, 0.5);
+  --hover-clippath-text-muted-30: rgba(250, 250, 250, 0.3);
+  --hover-clippath-text-muted-90: rgba(250, 250, 250, 0.9);
+
+  --hover-clippath-border-light-08: rgba(250, 250, 250, 0.08);
+  --hover-clippath-border-light-20: rgba(250, 250, 250, 0.2);
+
+  --hover-clippath-hover-bg: rgba(250, 250, 250, 0.05);
+
+  --hover-clippath-arrow-stroke: rgba(250, 250, 250, 0.6);
+
+  --hover-clippath-shadow-strong: rgba(0, 0, 0, 0.5);
+
+  --hover-clippath-gradient-overlay-start: rgba(102, 126, 234, 0.2);
+  --hover-clippath-gradient-overlay-end: rgba(118, 75, 162, 0.2);
+}
+
+.hover-clippath-container {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: "Space Grotesk", sans-serif;
+  width: 100vw;
+  background: var(--hover-clippath-bg-main);
+  color: var(--hover-clippath-text-main);
+  overflow-x: hidden;
+  padding: 4rem 2rem;
+}
+
+.hover-clippath-projects-wrapper {
+  max-width: 1400px;
+  width: 100%;
+}
+
+.hover-clippath-section-title {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hover-clippath-text-muted-40);
+  margin-bottom: 3rem;
+  padding-left: 2rem;
+}
+
+.hover-clippath-projects {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.hover-clippath-project {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3.5rem 2rem;
+  border-top: 1px solid var(--hover-clippath-border-light-08);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-clippath-project::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: var(--hover-clippath-hover-bg);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.hover-clippath-project:hover::before {
+  width: 100%;
+}
+
+.hover-clippath-project-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.hover-clippath-project-number {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--hover-clippath-text-muted-30);
+  min-width: 3rem;
+}
+
+.hover-clippath-project h2 {
+  font-size: 4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--hover-clippath-text-main);
+}
+
+.hover-clippath-project-meta {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  z-index: 1;
+  position: relative;
+}
+
+.hover-clippath-project p {
+  font-size: 0.95rem;
+  color: var(--hover-clippath-text-muted-50);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.05em;
+}
+
+.hover-clippath-project-year {
+  font-size: 0.95rem;
+  color: var(--hover-clippath-text-muted-30);
+  font-weight: 300;
+}
+
+.hover-clippath-arrow {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--hover-clippath-border-light-20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hover-clippath-arrow svg {
+  width: 1rem;
+  height: 1rem;
+  stroke: var(--hover-clippath-arrow-stroke);
+}
+
+.hover-clippath-project:last-child {
+  border-bottom: 1px solid var(--hover-clippath-border-light-08);
+}
+
+.hover-clippath-project:hover h2 {
+  transform: translateX(20px);
+  color: var(--hover-clippath-text-main);
+}
+
+.hover-clippath-project:hover p {
+  transform: translateX(10px);
+  color: var(--hover-clippath-text-muted-90);
+}
+
+.hover-clippath-project:hover .hover-clippath-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  background: var(--hover-clippath-text-main);
+  border-color: transparent;
+}
+
+.hover-clippath-project:hover .hover-clippath-arrow svg {
+  stroke: var(--hover-clippath-bg-main);
+}
+
+.hover-clippath-project-thumbnail {
+  position: fixed;
+  width: 500px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  transform-origin: center center;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px var(--hover-clippath-shadow-strong);
+}
+
+.hover-clippath-thumbnail {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hover-clippath-thumbnail::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--hover-clippath-gradient-overlay-start) 0%,
+    var(--hover-clippath-gradient-overlay-end) 100%
+  );
+  mix-blend-mode: overlay;
+}
+
+.hover-clippath-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-clippath-project:hover
+  ~ .hover-clippath-projects-wrapper
+  .hover-clippath-thumbnail
+  img {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .hover-clippath-project h2 {
+    font-size: 2.5rem;
+  }
+
+  .hover-clippath-project {
+    padding: 2.5rem 1rem;
+  }
+
+  .hover-clippath-project-thumbnail {
+    width: 350px;
+    height: 220px;
+  }
+
+  .hover-clippath-header {
+    padding: 1.5rem 2rem;
+  }
+}

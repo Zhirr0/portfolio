@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+.rendet-text-animations-section {
+  @apply bg-[#24120f];
+}
+
+/* first spacer */
+.rendet-text-animations-section > div:nth-child(1) {
+  @apply h-[75svh];
+}
+
+/* middle spacers */
+.rendet-text-animations-section > div:nth-child(3),
+.rendet-text-animations-section > div:nth-child(5),
+.rendet-text-animations-section > div:nth-child(7) {
+  @apply h-svh;
+}
+
+/* last spacer */
+.rendet-text-animations-section > div:nth-child(9) {
+  @apply h-[50svh];
+}

@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
+
+.line-masks-section {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: #1a0e0c;
+  position: relative;
+  padding: 4rem 2rem;
+}
+
+.line-masks-section-height {
+  min-height: 100svh;
+}
+
+.line-masks-container-header {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #faeade;
+  font-size: 4rem;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.line-masks-content {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  padding-top: 8rem;
+}
+
+.line-masks-block {
+  position: relative;
+  width: 100%;
+}
+
+.line-masks-text {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.4;
+  color: #e8ddd1;
+  letter-spacing: -0.02em;
+}
+
+.line-overflow-hidden {
+  overflow: hidden;
+  display: block;
+}
+
+.line-mask-wrapper {
+  display: block;
+  will-change: transform, opacity;
+}
+
+@media (max-width: 1000px) {
+  .line-masks-container-header {
+    font-size: 2rem;
+    letter-spacing: -0.8px;
+  }
+
+  .line-masks-content {
+    gap: 4rem;
+    padding-top: 6rem;
+  }
+
+  .line-masks-text {
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .line-masks-section {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .line-masks-text {
+    font-size: 1.25rem;
+  }
+
+  .line-masks-content {
+    gap: 3rem;
+  }
+}
