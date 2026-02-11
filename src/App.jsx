@@ -47,7 +47,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const update = (time) => lenisRef.current?.lenis?.raf(time * 900);
+    const update = (time) => lenisRef.current?.lenis?.raf(time * 700);
     gsap.ticker.add(update);
     return () => gsap.ticker.remove(update);
   }, []);
