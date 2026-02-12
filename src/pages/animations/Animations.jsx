@@ -4,6 +4,8 @@ import AnimationsHeader from "../../components/AnimationsHeader";
 import RoutingTransition from "../../components/transitionRouter/Transition";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
+import CardBackground from "../../components/CardBackground";
+import CardBackgroundLight from "../../components/CardBackgroundLight";
 
 const Animations = () => {
   const isMobile = useMediaQuery({ maxWidth: "650px" });
@@ -60,6 +62,7 @@ const Animations = () => {
       className="animations-container"
     >
       {/* Ambient light effect */}
+      {isDarkMode ?  <CardBackground />:<CardBackgroundLight />  }
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-700"
         style={{

@@ -4,21 +4,17 @@
   --animations-styles-text-main: oklch(20% 0.005 30);
   --animations-styles-accent-main: #b31f35;
   --animations-styles-accent-warning: #623cea;
-  --pure-black : #000;
-  --pure-white: #fff;   
-  --special-red: oklch(38.0% 0.336 25.1);
 }
 
 [data-theme="dark"] {
   --animations-styles-bg-main: oklch(20% 0.005 30);
-  --animations-styles-text-main: oklch(94.7% 0.024 47.1);
+  --animations-styles-text-main: oklch(100% 0.00011 271.152);
   --animations-styles-accent-main: oklch(97.4% 0.149 51.3);
   --animations-styles-accent-warning: #b5a6d9;
 }
 
 .animations-container {
   margin: 0 auto;
-  background-color: var(--animations-styles-bg-main);
   color: var(--animations-styles-text-main);
   font-family: "Cinzel", serif;
   

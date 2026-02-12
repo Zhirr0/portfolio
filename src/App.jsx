@@ -75,7 +75,7 @@ const App = () => {
       options={{
         autoRaf: false,
         smoothWheel: true,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
       }}
       ref={lenisRef}
     >
