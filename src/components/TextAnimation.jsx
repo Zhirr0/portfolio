@@ -224,7 +224,7 @@ const TextAnimation = () => {
 
       return Math.min(Math.max(idx, 0), totalHeaders - 1);
     }
-    
+
     ScrollTrigger.create({
       trigger: ".text-animation-section",
       start: "top top",
@@ -236,22 +236,22 @@ const TextAnimation = () => {
         const metrics = getScrollMetrics(e.progress * 100, 6);
         const progress = parseFloat(metrics.fixedProgress); // 0 to 100 not 0.01 to 1
         const targetIndex = computeVisibleIndex(progress, partsByIndex.length);
-        
+
         gsap.set(progressBar, { scaleY: e.progress });
-        
+
         if (progress >= 1 && progress <= 99) {
           gsap.to(".slider-indicator", {
             opacity: 1,
-            duration:1,
+            duration: 1,
             ease: "power2",
             overwrite: "auto",
           });
         }
 
-        if (progress < 1 ) {
+        if (progress < 1) {
           gsap.to(".slider-indicator", {
             opacity: 0,
-            duration:1,
+            duration: 1,
             ease: "power2",
             overwrite: "auto",
           });
@@ -274,7 +274,6 @@ const TextAnimation = () => {
         animateIndicators(targetIndex);
 
         activeIndex = targetIndex;
-
       },
     });
   }, []);

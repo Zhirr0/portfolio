@@ -17,7 +17,6 @@ const Animations = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX - 20, y: e.clientY - 20 });
@@ -58,11 +57,11 @@ const Animations = () => {
   return (
     <div
       ref={containerRef}
-        style={{ paddingTop: "clamp(50px, 9vw, 100px)" }}
+      style={{ paddingTop: "clamp(50px, 9vw, 100px)" }}
       className="animations-container"
     >
       {/* Ambient light effect */}
-      {isDarkMode ?  <CardBackground />:<CardBackgroundLight />  }
+      {isDarkMode ? <CardBackground /> : <CardBackgroundLight />}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-700"
         style={{

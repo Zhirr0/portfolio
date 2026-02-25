@@ -23,24 +23,19 @@ export const signatureConfig = {
   },
 
   svgAnimation: {
-    drawDuration: 1.5,
-    fillDuration: 0.5,
-    fillDelay: 0,
-    staggerAmount: 0.01,
+    // How long the fill-in transition takes when reaching 100%
+    fillDuration: 0.6,
+    fillStagger: 0.02,
     ease: {
-      draw: "power2.inOut",
       fill: "power1.in",
     },
-  },
-
-  undrawAnimation: {
-    pauseBeforeUndraw: 1,
-    unfillDuration: 0.5,
-    undrawDuration: 1.5,
-    staggerAmount: 0.01,
-    ease: {
-      unfill: "power1.in",
-      undraw: "power2.inOut",
+    glow: {
+      // Tweak these if your logo color is lighter/darker
+      peakFilter:
+        "drop-shadow(0 0 18px rgba(49, 49, 49, 0.9)) drop-shadow(0 0 40px rgba(49, 49, 49, 0.5))",
+      restFilter: "drop-shadow(0 0 6px rgba(49, 49, 49, 0.3))",
+      peakDuration: 0.5,
+      fadeDuration: 1,
     },
   },
 };

@@ -14,7 +14,7 @@ const GitHub = () => {
       const width = window.innerWidth;
       
      if (width < 1024) {
-        setSvgSize(130);
+        setSvgSize(70);
       } else {
         setSvgSize(130);
       }

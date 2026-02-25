@@ -10,7 +10,7 @@ import {
   path5,
   path6,
   path7,
-  path8, 
+  path8,
 } from "./signatureSVG";
 import { lockScroll, unlockScroll } from "../../utils/screenLocker";
 import signatureConfig from "../../config/signature.config";
@@ -19,16 +19,17 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const digit3Ref = useRef(null);
+  const pathLengthsRef = useRef([]);
+  const totalLengthRef = useRef(0);
+  const glowTriggeredRef = useRef(false);
 
   // Track loading progress
   useEffect(() => {
     let progress = 0;
     const increment = 1;
-    const interval = .1; // Update every 30ms for smooth animation
+    const interval = 0.1;
 
-    // Simulate checking various load states
     const checkLoadProgress = () => {
-      // Check document ready state
       if (document.readyState === "interactive" && progress < 40) {
         progress = 40;
       }
@@ -36,7 +37,6 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
         progress = 70;
       }
 
-      // Check if images are loaded
       const images = Array.from(document.images);
       const videos = Array.from(document.querySelectorAll("video"));
       const allMedia = [...images, ...videos];
@@ -59,21 +59,19 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
 
     const progressInterval = setInterval(() => {
       const currentProgress = checkLoadProgress();
-      
+
       setLoadProgress((prev) => {
         const newProgress = Math.min(prev + increment, currentProgress);
-        
-        // When we reach 100%, mark as loaded
+
         if (newProgress >= 100 && !isLoaded) {
           setIsLoaded(true);
           clearInterval(progressInterval);
         }
-        
+
         return newProgress;
       });
     }, interval);
 
-    // Ensure we reach 100% after DOMContentLoaded
     const handleDOMContentLoaded = () => {
       setTimeout(() => {
         setLoadProgress(100);
@@ -94,14 +92,13 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
     };
   }, [isLoaded]);
 
+  // Initialize SVG paths, set up dash arrays, store lengths, don't animate yet
   useGSAP(() => {
     const svgEl = document.querySelector("svg.zhir-svg");
     const containerEl = document.querySelector(".svg-container");
-    const digit1 = document.querySelector(".digit-1");
-    const digit2 = document.querySelector(".digit-2");
     const digit3 = document.querySelector(".digit-3");
 
-    if (!svgEl || !containerEl || !digit1 || !digit2 || !digit3) return;
+    if (!svgEl || !containerEl || !digit3) return;
 
     lockScroll();
 
@@ -122,75 +119,66 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
 
     digit3Ref.current = digit3;
 
-    // Infinite SVG drawing animation
-    const svgDrawing = svgEl.querySelectorAll("path");
-    const svgTimeline = gsap.timeline();
+    // Measure all paths and set them to fully hidden
+    const svgPaths = svgEl.querySelectorAll("path");
+    let totalLength = 0;
+    const lengths = [];
 
-    const { svgAnimation } = signatureConfig;
-    
-    svgDrawing.forEach((path, i) => {
+    svgPaths.forEach((path) => {
       const length = path.getTotalLength();
+      lengths.push(length);
+      totalLength += length;
 
       path.style.strokeDasharray = length;
-      path.style.strokeDashoffset = length;
-      path.style.fill = "#313131";
+      path.style.strokeDashoffset = length; // fully hidden 
+      path.style.fill = "#fafafa";
       path.style.fillOpacity = 0;
-
-      svgTimeline.to(
-        path,
-        { strokeDashoffset: 0, duration: svgAnimation.drawDuration },
-        i * svgAnimation.staggerAmount,
-      ).to(
-        path,
-        {
-          fillOpacity: 1,
-          duration: svgAnimation.fillDuration,
-          ease: svgAnimation.ease.fill,
-        },
-        `>${svgAnimation.fillDelay}`,
-      );
+      path.style.transition = "none";
     });
 
-    // Add undraw animation to loop
-    const { undrawAnimation } = signatureConfig;
-    const drawEnd = svgTimeline.duration();
-
-    svgDrawing.forEach((path, i) => {
-      const length = path.getTotalLength();
-
-      svgTimeline.to(
-        path,
-        {
-          fillOpacity: 0,
-          duration: undrawAnimation.unfillDuration,
-          ease: undrawAnimation.ease.unfill,
-        },
-        drawEnd +
-          undrawAnimation.pauseBeforeUndraw +
-          i * undrawAnimation.staggerAmount,
-      );
-
-      svgTimeline.to(
-        path,
-        {
-          strokeDashoffset: length,
-          duration: undrawAnimation.undrawDuration,
-          ease: undrawAnimation.ease.undraw,
-        },
-        drawEnd +
-          undrawAnimation.pauseBeforeUndraw +
-          i * undrawAnimation.staggerAmount +
-          undrawAnimation.unfillDuration,
-      );
-    });
-
-    return () => {
-      svgTimeline.kill();
-    };
+    pathLengthsRef.current = lengths;
+    totalLengthRef.current = totalLength;
   }, []);
 
-  // Update counter based on load progress
+  // Drive SVG drawing from load progress (0–100 maps to 0–100% drawn)
   useEffect(() => {
+    const svgEl = document.querySelector("svg.zhir-svg");
+    if (
+      !svgEl ||
+      pathLengthsRef.current.length === 0 ||
+      totalLengthRef.current === 0
+    )
+      return;
+
+    const svgPaths = svgEl.querySelectorAll("path");
+    const totalLength = totalLengthRef.current;
+    const drawnLength = (loadProgress / 100) * totalLength;
+
+    let consumed = 0;
+    svgPaths.forEach((path, i) => {
+      const pathLen = pathLengthsRef.current[i];
+
+      if (consumed + pathLen <= drawnLength) {
+        // Fully drawn
+        gsap.set(path, { strokeDashoffset: 0 });
+      } else if (consumed >= drawnLength) {
+        // Not yet started
+        gsap.set(path, { strokeDashoffset: pathLen });
+      } else {
+        // Partially drawn — smooth it slightly with a very short tween
+        const partial = drawnLength - consumed;
+        gsap.to(path, {
+          strokeDashoffset: pathLen - partial,
+          duration: 0.08,
+          ease: "none",
+          overwrite: "auto",
+        });
+      }
+
+      consumed += pathLen;
+    });
+
+    // Update counter digits
     if (!digit3Ref.current) return;
 
     const digit1 = document.querySelector(".digit-1");
@@ -202,87 +190,103 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
     const numHeight = digit3.querySelector(".num")?.clientHeight || 0;
     if (numHeight === 0) return;
 
-    // Calculate digit positions based on progress
     const ones = loadProgress % 10;
     const tens = Math.floor((loadProgress % 100) / 10);
     const hundreds = Math.floor(loadProgress / 100);
 
-    // Animate digits to show current progress
-    gsap.to(digit3, {
-      y: -ones * numHeight,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-
-    gsap.to(digit2, {
-      y: -tens * numHeight,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-
-    gsap.to(digit1, {
-      y: -hundreds * numHeight,
-      duration: 0.3,
-      ease: "power2.out",
-    });
+    gsap.to(digit3, { y: -ones * numHeight, duration: 0.3, ease: "power2.out" });
+    gsap.to(digit2, { y: -tens * numHeight, duration: 0.3, ease: "power2.out" });
+    gsap.to(digit1, { y: -hundreds * numHeight, duration: 0.3, ease: "power2.out" });
   }, [loadProgress]);
 
-  // Exit animation when loaded
+  // On load complete: fill + glow, then exit
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || glowTriggeredRef.current) return;
+    glowTriggeredRef.current = true;
 
     const containerEl = document.querySelector(".svg-container");
     const svgEl = document.querySelector("svg.zhir-svg");
 
-    if (!containerEl) return;
+    if (!containerEl || !svgEl) return;
 
-    gsap.set(containerEl, {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-    });
+    const svgPaths = svgEl.querySelectorAll("path");
 
-    const exitTimeline = gsap.timeline({
+    const completionTimeline = gsap.timeline({
       onComplete: () => {
-        if (svgEl) {
-          const leaveEvt = new MouseEvent("mouseleave", {
-            bubbles: true,
-            cancelable: true,
-            composed: true,
-          });
-          svgEl.dispatchEvent(leaveEvt);
-        }
+        // Exit wipe
+        gsap.set(containerEl, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        });
 
-        const cursorEl = document.getElementById("cursor");
-        if (cursorEl) {
-          const cursorText = cursorEl.querySelector(".cursor-text");
-          if (cursorText) cursorText.style.display = "none";
-          gsap.to(cursorEl, { scale: 1, duration: 0.5, ease: "circ.inOut" });
-        }
+        const exitTimeline = gsap.timeline({
+          onComplete: () => {
+            const leaveEvt = new MouseEvent("mouseleave", {
+              bubbles: true,
+              cancelable: true,
+              composed: true,
+            });
+            svgEl.dispatchEvent(leaveEvt);
 
-        containerEl.remove();
-        unlockScroll();
-        
-        if (onLoadComplete) {
-          onLoadComplete();
-        }
+            const cursorEl = document.getElementById("cursor");
+            if (cursorEl) {
+              const cursorText = cursorEl.querySelector(".cursor-text");
+              if (cursorText) cursorText.style.display = "none";
+              gsap.to(cursorEl, { scale: 1, duration: 0.5, ease: "circ.inOut" });
+            }
+
+            containerEl.remove();
+            unlockScroll();
+
+            if (onLoadComplete) {
+              onLoadComplete();
+            }
+          },
+        });
+
+        exitTimeline.to(containerEl, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+          duration: 2,
+          backgroundColor: "#000",
+          ease: "expo.in",
+          delay: 1,
+        });
       },
     });
 
-    exitTimeline.to(containerEl, {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-      duration: 2,
-      backgroundColor: "#000",
-      ease: "expo.in",
-      delay: 2,
+    // 1. Fill all paths
+    completionTimeline.to(Array.from(svgPaths), {
+      fillOpacity: 1,
+      duration: 0.6,
+      ease: "power1.in",
+      stagger: 0.02,
+    });
+
+    // 2. Glow pulse using drop-shadow filter on the SVG element
+    completionTimeline.to(
+      svgEl,
+      {
+        filter: "drop-shadow(0 0 18px rgba(250, 250, 250, 0.9))",
+        duration: 0.5,
+        ease: "power2.out",
+      },
+      "<0.2", 
+    );
+
+    // 3. Fade glow down softly
+    completionTimeline.to(svgEl, {
+      filter: "drop-shadow(0 0 6px rgba(250, 250, 250, 0.2))",
+      duration: 1,
+      ease: "power2.in",
     });
 
     return () => {
-      exitTimeline.kill();
+      completionTimeline.kill();
     };
   }, [isLoaded, onLoadComplete]);
 
   return (
-    <div className="svg-container bg-light-secondary">
-      <div className="text-dark-tertiary counter overflow-hidden">
+    <div className="svg-container bg-dark-primary">
+      <div className="text-light-primary counter overflow-hidden">
         <div className="digit-1 digit">
           <div className="num">0</div>
           <div className="num">1</div>
@@ -322,14 +326,14 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d={path1} stroke="#131313" />
-            <path d={path2} stroke="#131313" />
-            <path d={path3} stroke="#131313" />
-            <path d={path4} stroke="#131313" />
-            <path d={path5} stroke="#131313" />
-            <path d={path6} stroke="#131313" />
-            <path d={path7} stroke="#131313" />
-            <path d={path8} stroke="#131313" />
+            <path d={path1} stroke="#fafafa" />
+            <path d={path2} stroke="#fafafa" />
+            <path d={path3} stroke="#fafafa" />
+            <path d={path4} stroke="#fafafa" />
+            <path d={path5} stroke="#fafafa" />
+            <path d={path6} stroke="#fafafa" />
+            <path d={path7} stroke="#fafafa" />
+            <path d={path8} stroke="#fafafa" />
           </svg>
         </h1>
       </div>
