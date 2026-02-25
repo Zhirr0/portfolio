@@ -294,7 +294,16 @@ const Cursor = () => {
       lastYRef.current = lastY;
       lastMoveTimeRef.current = Date.now();
 
-      if (isPinnedRef.current) return;
+      if (isPinnedRef.current) {
+        // Auto-unpin if the pinned element was removed from the DOM (route change)
+        // or the pointer is no longer hovering over any pinnable element
+        const stillInDOM = currentPinnedEl && document.contains(currentPinnedEl);
+        const stillUnderPointer = e.target.closest(PINNABLE_SELECTOR);
+        if (!stillInDOM || !stillUnderPointer) {
+          unpinToCircle();
+        }
+        return;
+      }
 
       gsap.to(cursor, {
         x: e.clientX - size / 2,
