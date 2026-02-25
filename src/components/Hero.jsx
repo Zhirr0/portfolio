@@ -67,7 +67,7 @@ const Hero = () => {
         className="hero-text flex flex-col -gap-10"
         style={{ paddingTop: "clamp(50px, 9vw, 100px)" }}
       >
-        <div ref={headerRef} className="hero-header">
+        <div ref={headerRef} className="hero-header w-fit">
           <h1 className="text-header">
             CREATIVE <br />
             DEVELOPER
