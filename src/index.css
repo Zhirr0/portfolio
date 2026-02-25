@@ -15,13 +15,6 @@ body {
   overflow-anchor: none;
   overflow-x: hidden;
 }
-html.lenis {
-  touch-action: manipulation !important;
-}
-
-html.lenis body {
-  touch-action: manipulation !important;
-}
 
 .slide-in {
   position: fixed;

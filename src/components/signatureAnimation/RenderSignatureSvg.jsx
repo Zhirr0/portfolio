@@ -318,7 +318,7 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
         </div>
         <div className="digit-4 digit">%</div>
       </div>
-      <div className="svg-header">
+      <div className="svg-header overflow-visible">
         <h1>
           <svg
             className="zhir-svg"
