@@ -319,9 +319,9 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
         <div className="digit-4 digit">%</div>
       </div>
       <div className="svg-header overflow-visible">
-        <h1>
+        <h1 className="overflow-visible">
           <svg
-            className="zhir-svg"
+            className="zhir-svg overflow-visible"
             viewBox="0 0 626 348"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

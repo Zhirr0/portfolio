@@ -8,6 +8,6 @@ export default defineConfig({
   },
   plugins: [react(), tailwindcss()],
   server: {
-    allowedHosts: ["bite-distinction-cadillac-jul.trycloudflare.com"],
+    allowedHosts: ["bosnia-tunnel-arbitrary-eagles.trycloudflare.com"],
   },
 });
