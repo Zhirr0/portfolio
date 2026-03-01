@@ -463,3 +463,517 @@ const Cursor = () => {
 };
 
 export default Cursor;
+
+
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv=fragCoord/iResolution.xy;
+    float dist = uv.x;
+    float phase=iTime*0.76;
+
+    float w1 = sin(dist*9.0 - phase*1.25 + uv.y*2.6);
+    float w2 = cos(dist*21.0 - phase*0.63 + uv.y*3.4 + 1.3);
+    float w3 = atan(dist*0.43 - phase*1.2 + uv.y*2.05 + 3.1);
+
+    float v1 = cos(uv.y*2.3 + phase*0.31 + dist*3.2);
+    float v2 = sin(uv.y*5.6 + phase*0.12 - dist*2.05);
+    float v3 = cos(uv.y*8.8 + phase*0.42 + dist*4.3);
+
+    w1 *= v1*0.52 + v2*0.48;
+    w2 *= v2*0.6  + v3*0.4;
+    w3 *= v3*0.47 + v1*3.05;
+
+    float waves = w1*0.31 + w2*0.24 + w3*0.2;
+    waves *= smoothstep(1.0,0.17,dist);
+    waves = waves*0.31 + 0.03;
+
+    fragColor = vec4(vec3(max(0.0,waves)),1.0);
+}
+
+// Variant 8: Cascading waves from top-left corner
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord/iResolution.xy;
+    vec3 col = vec3(0.0);
+    float dist = length(uv) * 1.0;
+    float wave1 = sin(dist * 32.0 - iTime * 1.2);
+    float wave2 = sin(dist * 26.0 - iTime * 2.9 + 1.0);
+    float wave3 = sin(dist * 10.0 - iTime * 1.5 + 2.0);
+    wave1 *= sin(uv.x * 5.0 - uv.y * 5.0 + iTime * 0.5);
+    wave2 *= sin(uv.x * 7.0 - uv.y * 7.0 - iTime * 0.3);
+    wave3 *= sin(uv.x * 4.0 - uv.y * 4.0 + iTime * 0.6);
+    float waves = wave1 * 2.3 + wave2 * 5.2 + wave3 * 6.15;
+    waves *= smoothstep(1.4, 0.3, dist);
+    waves = waves * 0.02 + 0.05;
+    waves = max(0.05, waves);
+    col = vec3(waves);
+    fragColor = vec4(col, 1.0);
+}
+
+// Variant 29: Phased wave motion
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord/iResolution.xy;
+    vec3 col = vec3(0.0);
+    float dist = uv.x;
+    float phase = iTime * 1.5;
+    float wave1 = sin(dist * 10.0 - phase);
+    float wave2 = sin(dist * 10.0 - phase + 2.094);
+    float wave3 = sin(dist * 10.0 - phase + 4.189);
+    wave1 *= sin((1.0 - uv.y) * 5.0 + phase * 0.3);
+    wave2 *= sin((1.0 - uv.y) * 5.0 + phase * 0.3 + 2.094);
+    wave3 *= sin((1.0 - uv.y) * 5.0 + phase * 0.3 + 4.189);
+
+    float waves = wave1 * 0.3 + wave2 * 0.3 + wave3 * 0.3;
+    waves *= smoothstep(1.0, 0.2, dist);
+    waves = waves * 0.53 + 0.04;
+    waves = max(0.0, waves);
+    col = vec3(waves);
+    fragColor = vec4(col, 1.0);
+}
+
+// Waves from bottom-left corner - bumpy curtain effect
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord/iResolution.xy; 
+    vec3 col = vec3(0.0); 
+    
+    // Distance from bottom-left corner (0,0)
+    float dist = length(uv); 
+    
+    // Direction vector from bottom-left
+    vec2 dir = normalize(uv);
+    
+    // Multiple wave frequencies for bumpy effect
+    float wave1 = sin(dist * 32.0 - iTime * 1.2); 
+    float wave2 = cos(dist * 39.0 - iTime * 0.9 + 1.0); 
+    float wave3 = cos(dist * 50.0 - iTime * 1.5 + 2.0); 
+    
+    // Add directional modulation for curtain-like bumps
+    wave1 *= sin(uv.x * 12.0 + iTime * 0.3); 
+    wave2 *= sin(uv.y * 20.0 - iTime * 0.3); 
+    wave3 *= sin((uv.x + uv.y) * 20.0 + iTime * 0.6); 
+    
+    // Combine waves
+    float waves = wave1 * 0.3 + wave2 * 0.2 + wave3 * 0.15; 
+    
+    // Fade out at edges
+    waves *= smoothstep(1.4, 0.0, dist); 
+    waves = waves * 0.55 + 0.05; 
+    waves = max(0.0, waves); 
+    
+    col = vec3(waves); 
+    fragColor = vec4(col, 1.0); 
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord/iResolution.xy; 
+    vec2 p = (uv * 2.0 - 1.0) * 3.0;
+    p.x *= iResolution.x / iResolution.y;
+    
+    // Triple domain warping for liquid effect
+    vec2 q = p + vec2(sin(iTime * 0.3), cos(iTime * 0.4));
+    q.x += sin(p.y * 1.5 + iTime * 0.5);
+    q.y += cos(p.x * 1.8 - iTime * 0.6);
+    
+    vec2 r = q;
+    r.x += sin(q.y * 2.2 + iTime * 0.7) * 0.5;
+    r.y += cos(q.x * 2.5 - iTime * 0.4) * 0.5;
+    
+    vec2 s = r;
+    s.x += sin(r.y * 3.0 - iTime * 0.8) * 0.3;
+    s.y += cos(r.x * 3.3 + iTime * 0.5) * 0.3;
+    
+    // Flowing waves
+    float waves = 0.0;
+    waves += sin(s.x * 4.0 + iTime) * 0.25;
+    waves += sin(s.y * 3.5 - iTime * 0.8) * 0.25;
+    waves += sin((s.x + s.y) * 2.5 + iTime * 0.6) * 0.2;
+    waves += cos(length(s) * 5.0 - iTime * 1.2) * 0.15;
+    waves += cos(atan(s.y, s.x) * 2.0 + iTime * 0.9) * 0.15;
+    
+    waves = waves + 0.5;
+    waves = smoothstep(0.3, 2.0, waves);
+    
+    vec3 col = vec3(waves);
+    fragColor = vec4(col, 1.0); 
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord/iResolution.xy; 
+    vec2 p = (uv * 2.0 - 1.0) * 3.0;
+    p.x *= iResolution.x / iResolution.y;
+    
+    // Triple domain warping for liquid effect
+    vec2 q = p + vec2(sin(iTime * 0.3), cos(iTime * 0.4));
+    q.x += sin(p.y * 1.5 + iTime * 0.5);
+    q.y += cos(p.x * 1.8 - iTime * 0.6);
+    
+    vec2 r = q;
+    r.x += sin(q.y * 2.2 + iTime * 0.7) * 0.5;
+    r.y += cos(q.x * 2.5 - iTime * 0.4) * 0.5;
+    
+    vec2 s = r;
+    s.x += sin(r.y * 3.0 - iTime * 0.8) * 0.3;
+    s.y += cos(r.x * 3.3 + iTime * 0.5) * 0.3;
+    
+    // Flowing waves
+    float waves = 0.0;
+    waves += sin(s.x * 4.0 + iTime) * 0.25;
+    waves += sin(s.y * 3.5 - iTime * 0.8) * 0.25;
+    waves += sin((s.x + s.y) * 2.5 + iTime * 0.6) * 0.2;
+    waves += cos(length(s) * 5.0 - iTime * 1.2) * 0.15;
+    waves += cos(atan(s.y, s.x) * 2.0 + iTime * 0.9) * 0.15;
+    
+    waves = waves + 0.5;
+    waves = smoothstep(0.01, 3.0, waves);
+    
+    vec3 col = vec3(waves);
+    fragColor = vec4(col, 1.0); 
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord/iResolution.xy; 
+    vec2 p = (uv * 2.0 - 1.0) * 2.5;
+    p.x *= iResolution.x / iResolution.y;
+    
+    vec2 q = p;
+    q.y += sin(p.x * 2.0 + iTime * 0.4) * 0.8;
+    q.x += cos(p.y * 1.5 - iTime * 0.3) * 0.6;
+    
+    vec2 r = q;
+    r.y += sin(q.x * 3.5 + iTime * 0.6) * 0.4;
+    r.x += cos(q.y * 2.8 - iTime * 0.5) * 0.3;
+    
+    float waves = 0.0;
+    waves += sin(r.y * 6.0 + iTime * 0.7);
+    waves += cos(r.x * 4.0 - iTime * 0.5) * 0.5;
+    waves += sin(length(r) * 3.0 + iTime * 0.8) * 0.3;
+    
+    waves = waves * 0.4 + 0.5;
+    waves = smoothstep(0.1, 2.5, waves);
+    
+    fragColor = vec4(vec3(waves), 1.0); 
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord / iResolution.xy;
+    vec2 p = uv;
+    
+    float t = iTime * 0.8; // ← slow time
+    
+    float dist = length(p);
+    
+    vec2 q = p;
+    q += vec2(
+        sin(dist * 3.5 - t * 0.8),
+        cos(dist * 3.0 - t * 0.7)
+    ) * 0.6;
+    
+    vec2 r = q;
+    r += vec2(
+        sin(length(q) * 5.0 - t * 1.0),
+        cos(dist * 4.5 - t * 0.9)
+    ) * 0.4;
+    
+    vec2 s = r;
+    s += vec2(
+        sin(dist * 6.5 - t * 1.2),
+        cos(length(r) * 6.0 - t * 1.1)
+    ) * 0.3;
+    
+    float waves = 0.0;
+    waves += sin(dist * 12.0 - t * 1.6);
+    waves += cos(length(s) * 15.0 - t * 1.9);
+    waves += sin(dist * 8.0 - t * 1.3) * 0.7;
+    
+    waves = waves * 0.38 + 0.5;
+    waves = smoothstep(0.13, 2.7, waves);
+    
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord / iResolution.xy;
+    vec2 p = uv;
+    
+    float t = iTime * 0.7; // ← slow time
+    
+    float dist = length(p);
+    
+    vec2 q = p;
+    q += vec2(
+        sin(dist * 3.5 - t * 0.8),
+        cos(dist * 3.0 - t * 0.7)
+    ) * 0.6;
+    
+    vec2 r = q;
+    r += vec2(
+        sin(length(q) * 5.0 - t * 1.0),
+        cos(dist * 4.5 - t * 0.9)
+    ) * 0.4;
+    
+    vec2 s = r;
+    s += vec2(
+        sin(dist * 6.5 - t * 1.2),
+        cos(length(r) * 6.0 - t * 1.1)
+    ) * 0.3;
+    
+    float waves = 0.0;
+    waves += sin(dist * 12.0 - t * 1.6);
+    waves += cos(length(s) * 15.0 - t * 1.9);
+    waves += sin(dist * 8.0 - t * 1.3) * 0.7;
+    
+    waves = waves * 0.11 + 2.5;
+    waves = smoothstep(4.0, 0.1, waves);
+    
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
+    vec2 uv = fragCoord/iResolution.xy;
+    vec2 p = uv;
+    
+    float dist = length(p);
+    
+    vec2 q = p;
+    q += vec2(sin(dist * 4.0 - iTime * 0.9), cos(dist * 3.7 - iTime * 0.8)) * 0.5;
+    
+    vec2 r = q;
+    r += vec2(sin(length(q) * 5.5 - iTime * 1.1), cos(dist * 5.0 - iTime * 1.0)) * 0.4;
+    
+    vec2 s = r;
+    s += vec2(sin(dist * 7.0 - iTime * 1.3), cos(length(r) * 6.5 - iTime * 1.2)) * 0.3;
+    
+    vec2 t = s;
+    t += vec2(sin(length(s) * 8.5 - iTime * 1.5), cos(dist * 8.0 - iTime * 1.4)) * 0.2;
+    
+    float waves = 0.0;
+    waves += sin(dist * 13.0 - iTime * 1.8);
+    waves += cos(length(t) * 15.0 - iTime * 2.0);
+    waves += sin(dist * 9.0 - iTime * 1.4) * 0.7;
+    
+    waves = waves * 0.38 + 0.5;
+    waves = smoothstep(0.15, 2.5, waves);
+    
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+
+    vec2 origin = vec2(0.0, 0.0);
+    float dist = length(uv - origin);
+    float diagonal = uv.x + uv.y;
+
+    // heavy first warp
+    vec2 q = uv;
+    q.x += sin(diagonal * 4.0 - dist * 5.0 - iTime * 0.5) * 0.45;
+    q.y += cos(diagonal * 3.8 - dist * 4.5 - iTime * 0.47) * 0.45;
+
+    vec2 r = q;
+    r.x += sin(length(q - origin) * 6.0 - iTime * 0.62) * 0.35;
+    r.y += cos(dist * 5.5 - iTime * 0.58) * 0.35;
+
+    vec2 s = r;
+    s.x += sin(diagonal * 9.0 - iTime * 0.73) * 0.28;
+    s.y += cos(length(r - origin) * 8.0 - iTime * 0.69) * 0.28;
+
+    vec2 t = s;
+    t.x += cos(dist * 11.0 - iTime * 0.81) * 0.20;
+    t.y += sin(diagonal * 10.0 - iTime * 0.77) * 0.20;
+
+    float waves = 0.0;
+    waves += sin(length(q - origin) * 7.0  - iTime * 0.55) * 0.55;
+    waves += cos(length(r - origin) * 12.0 - iTime * 0.71) * 0.48;
+    waves += sin(length(s - origin) * 18.0 - iTime * 0.88) * 0.40;
+    waves += cos(length(t - origin) * 26.0 - iTime * 1.05) * 0.32;
+    waves += sin(diagonal * 15.0            - iTime * 0.78) * 0.28;
+    waves += cos(dist * 33.0               - iTime * 1.15) * 0.22;
+    waves += sin((dist * 20.0 + diagonal * 12.0) - iTime * 0.95) * 0.20;
+    waves += cos(length(t - origin) * 42.0 - iTime * 1.30) * 0.15;
+
+    float falloff = smoothstep(2.0, 0.0, dist);
+    waves *= falloff;
+
+    // dramatic contrast push
+    waves = waves * 0.55 + 0.5;
+    waves = pow(abs(waves), 0.6) * sign(waves) + 0.5 * (1.0 - sign(waves));
+    waves = smoothstep(1.5, 0.15, waves);
+    waves = clamp(waves, 0.0, 1.0);
+
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+
+    vec2 origin = vec2(0.0, 0.0);
+    float dist = length(uv - origin);
+    float diagonal = uv.x + uv.y;
+    float cross = uv.x - uv.y;
+
+    vec2 q = uv;
+    q.x += sin(cross * 6.5 - dist * 4.0 - iTime * 0.44) * 0.38;
+    q.y += cos(diagonal * 6.0 - dist * 3.8 - iTime * 0.40) * 0.38;
+
+    vec2 r = q;
+    r.x += sin(length(q) * 8.5 - iTime * 0.60) * 0.30;
+    r.y += cos(cross * 7.0   - iTime * 0.56) * 0.30;
+
+    vec2 s = r;
+    s.x += cos(dist * 12.0 - iTime * 0.74) * 0.22;
+    s.y += sin(length(r) * 10.0 - iTime * 0.70) * 0.22;
+
+    float waves = 0.0;
+    // folds — abs() creates sharp bright veins like caustics
+    waves += abs(sin(length(q) * 10.0 - iTime * 0.62)) * 0.60;
+    waves += abs(cos(length(r) * 16.0 - iTime * 0.80)) * 0.50;
+    waves += abs(sin(length(s) * 24.0 - iTime * 1.00)) * 0.38;
+    waves += abs(cos(diagonal * 14.0  - iTime * 0.72)) * 0.30;
+    waves += abs(sin(cross * 20.0     - iTime * 0.90)) * 0.25;
+    waves += abs(cos(dist * 36.0      - iTime * 1.20)) * 0.18;
+    waves += abs(sin((dist * 18.0 + cross * 12.0) - iTime * 0.85)) * 0.22;
+
+    float falloff = smoothstep(1.8, 0.0, dist);
+    waves *= falloff;
+
+    waves = 1.0 - waves * 0.65; // invert for dark veins on bright
+    waves = pow(waves, 2.2);
+    waves = clamp(waves, 0.0, 1.0);
+
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+float vnoise(vec2 p) {
+    vec2 i = floor(p); vec2 f = fract(p);
+    f = f*f*(3.0-2.0*f);
+    return mix(mix(hash(i), hash(i+vec2(1,0)), f.x),
+               mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+}
+
+float fbm(vec2 p) {
+    float v = 0.0, a = 0.5;
+    for(int i = 0; i < 6; i++) {
+        v += a * vnoise(p);
+        p = p * 2.1 + vec2(1.7, 9.2);
+        a *= 0.5;
+    }
+    return v;
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+
+    vec2 origin = vec2(0.0, 0.0);
+    float dist = length(uv - origin);
+    float diagonal = uv.x + uv.y;
+
+    // fbm-driven warp — fractal domain distortion
+    float f1 = fbm(uv * 3.0 + iTime * 0.15);
+    float f2 = fbm(uv * 3.0 + vec2(f1) + iTime * 0.12);
+    float f3 = fbm(uv * 3.0 + vec2(f2 * 1.5) - iTime * 0.10);
+
+    vec2 warped = uv + vec2(f1 - 0.5, f2 - 0.5) * 0.55;
+    float wd = length(warped - origin);
+
+    float waves = 0.0;
+    waves += sin(wd * 11.0 - iTime * 0.70) * 0.55;
+    waves += cos(wd * 20.0 - iTime * 0.90) * 0.42;
+    waves += sin(f3 * 18.0 - iTime * 0.55) * 0.38;
+    waves += cos(diagonal * 12.0 - iTime * 0.68) * 0.30;
+    waves += sin(wd * 34.0 - iTime * 1.10) * 0.24;
+    waves += (f1 - 0.5) * 0.60; // raw fbm = lumpy noise mass
+    waves += (f2 - 0.5) * 0.45;
+    waves += cos(wd * 48.0 - iTime * 1.35) * 0.16;
+
+    // sharp vein mask: 1-abs(sin()) = thin bright lines
+    float veins = 1.0 - abs(sin(wd * 28.0 - iTime * 1.05));
+    veins = pow(veins, 4.0) * 0.70;
+    waves += veins;
+
+    float falloff = smoothstep(1.8, 0.0, dist);
+    waves *= falloff;
+
+    waves = waves * 0.09 + 0.06;
+    waves = pow(clamp(waves, 0.0, 1.0), 0.65);
+
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+    vec2 origin = vec2(1.0, 0.0);
+    float dist = length(uv - origin);
+    float diag = uv.x + uv.y;
+    float cross = uv.x - uv.y;
+
+    vec2 q = uv;
+    q.x += sin(diag * 4.5 - iTime * 0.28) * 0.42 + cos(cross * 3.8 - iTime * 0.24) * 0.28;
+    q.y += cos(dist * 4.2 - iTime * 0.26) * 0.42 + sin(diag * 3.5 - iTime * 0.22) * 0.28;
+
+    vec2 r = q;
+    r.x += sin(length(q) * 7.0 - iTime * 0.38) * 0.30;
+    r.y += cos(cross * 6.5 - iTime * 0.35) * 0.30;
+
+    vec2 s = r;
+    s.x += cos(length(r) * 9.5 - iTime * 0.48) * 0.22;
+    s.y += sin(diag * 8.0 - iTime * 0.44) * 0.22;
+
+    float waves = 0.0;
+    // abs creates the sharp bright caustic lines
+    waves += abs(sin(length(q) * 12.0 - iTime * 0.62)) * 0.65;
+    waves += abs(cos(length(r) * 20.0 - iTime * 0.80)) * 0.52;
+    waves += abs(sin(length(s) * 30.0 - iTime * 0.98)) * 0.40;
+    waves += abs(cos(diag * 16.0 - iTime * 0.70)) * 0.32;
+    waves += abs(sin(cross * 22.0 - iTime * 0.86)) * 0.26;
+    waves -= abs(cos((dist * 14.0 + diag * 9.0) - iTime * 0.74)) * 0.20;
+
+    float falloff = smoothstep(5.0, 0.0, dist);
+    waves *= falloff;
+    // invert so lines are bright on dark water
+    waves = 1.0 - clamp(waves * 0.7, 0.0, 2.0);
+    waves = pow(waves, 2.5);
+    fragColor = vec4(vec3(waves), 1.0);
+}
+
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+float vnoise(vec2 p) {
+    vec2 i = floor(p); vec2 f = fract(p); f = f*f*(3.0-2.0*f);
+    return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y);
+}
+float fbm(vec2 p, float t) {
+    float v = 0.0, a = 0.55;
+    for(int i=0;i<6;i++){
+        v += a * vnoise(p + t * 0.04 * float(i+1));
+        p = p * 2.05 + vec2(3.1, 1.7);
+        a *= 0.52;
+    }
+    return v;
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+    vec2 origin = vec2(0.0, 0.0);
+    float dist = length(uv - origin);
+
+    // fbm-driven field — very smooth, very slow
+    float f1 = fbm(uv * 1.6, iTime);
+    float f2 = fbm(uv * 1.6 + vec2(f1 * 0.8, f1 * 0.6), iTime * 0.8);
+    float field = f1 * 0.55 + f2 * 0.45;
+
+    // wide smooth blobs — high threshold softness = magma viscosity
+    float magma = smoothstep(0.36, 0.64, field);
+    float crust  = 1.0 - smoothstep(0.60, 0.70, field); // dark crust on top
+    float hotspot = exp(-abs(field - 0.58) * 14.0) * 0.80; // bright seam
+
+    float waves = magma * 0.65 * crust + hotspot;
+    waves += (f1 - 0.5) * 0.25;
+
+    float falloff = smoothstep(5.9, 2.0, dist);
+    waves *= falloff;
+    waves = pow(clamp(waves, 0.0, 1.0), 0.78);
+    fragColor = vec4(vec3(waves), 1.0);
+}
+

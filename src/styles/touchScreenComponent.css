@@ -2,7 +2,7 @@
 
 /* Parent container */
 .video-showcase-section {
-  @apply relative h-auto w-dvw;
+  @apply relative h-auto w-svw;
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: repeat(3.5, 1fr);
@@ -65,9 +65,9 @@
         backdrop-blur-xl 
         rounded-full
         cursor-pointer;
-        img {
-          @apply scale-40 translate-x-1;
-        }
+      img {
+        @apply scale-40 translate-x-1;
+      }
     }
   }
 
@@ -194,9 +194,9 @@
         backdrop-blur-xl 
         rounded-full
         cursor-pointer;
-        img  {
-          @apply scale-40 translate-x-1;
-        }
+      img {
+        @apply scale-40 translate-x-1;
+      }
     }
   }
 
@@ -323,9 +323,9 @@
         backdrop-blur-xl 
         rounded-full
         cursor-pointer;
-        img {
-          @apply translate-x-1 scale-35;
-        }
+      img {
+        @apply translate-x-1 scale-35;
+      }
     }
   }
 

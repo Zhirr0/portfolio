@@ -195,11 +195,10 @@ const Cursor = () => {
         pinnedTweenRef.current = null;
       }
 
-      // Block velocity/rotation animation for 0.5s after leaving a pinned element
       unpinCooldownRef.current = true;
       setTimeout(() => {
         unpinCooldownRef.current = false;
-      }, 500);
+      }, 1000);
 
       // Flip immediately so onMouseMove resumes tracking during the unpin animation
       isPinnedRef.current = false;
@@ -264,7 +263,6 @@ const Cursor = () => {
 
     window.addEventListener("resize", onResize, { passive: true });
 
-    // --- Movement / input handlers ---
 
     const getElementUnderPointer = (x, y) => {
       const els = document.elementsFromPoint(x, y);
@@ -383,7 +381,6 @@ const Cursor = () => {
     window.addEventListener("cursorUpdate", onCursorUpdate);
     window.addEventListener("scroll", scheduleCheck, { passive: true });
     window.addEventListener("wheel", scheduleCheck, { passive: true });
-    window.addEventListener("touchmove", scheduleCheck, { passive: true });
     document.addEventListener("mousedown", mousedownForDrag);
     document.addEventListener("mouseup", () => {
       if (isDragging) onDragEnd();
@@ -397,7 +394,6 @@ const Cursor = () => {
       window.removeEventListener("cursorUpdate", onCursorUpdate);
       window.removeEventListener("scroll", scheduleCheck);
       window.removeEventListener("wheel", scheduleCheck);
-      window.removeEventListener("touchmove", scheduleCheck);
       document.removeEventListener("mousedown", mousedownForDrag);
       document.removeEventListener("pointerover", onPointerOver);
       document.removeEventListener("pointerout", onPointerOut);

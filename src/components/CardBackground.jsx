@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 const VERT = `
   attribute vec2 position;
   void main() {
-    gl_Position = vec4(position, 0.0, 1.0);
+    gl_Position = vec4(position, 0.5,0.5);
   }
 `;
 
@@ -12,42 +12,42 @@ const FRAG = `
   uniform vec2  iResolution;
   uniform float iTime;
 
-  void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+
+  void mainImage(out vec4 fragColor, in vec2 fragCoord) { 
     vec2 uv = fragCoord / iResolution.xy;
-    vec2 origin = vec2(1.0, 0.0);
-    float dist = length(uv - origin);
-    float diag = uv.x + uv.y;
-    float cross = uv.x - uv.y;
-
-    vec2 q = uv;
-    q.x += sin(diag * 4.5 - iTime * 0.28) * 0.42 + cos(cross * 3.8 - iTime * 0.24) * 0.28;
-    q.y += cos(dist * 4.2 - iTime * 0.26) * 0.42 + sin(diag * 3.5 - iTime * 0.22) * 0.28;
-
+    vec2 p = uv;
+    
+    float t = iTime * 0.8;
+    float dist = length(p);
+    
+    vec2 q = p;
+    q += vec2(
+        sin(dist * 3.5 - t * 0.8),
+        cos(dist * 3.0 - t * 0.7)
+    ) * 0.6;
+    
     vec2 r = q;
-    r.x += sin(length(q) * 7.0 - iTime * 0.38) * 0.30;
-    r.y += cos(cross * 6.5 - iTime * 0.35) * 0.30;
-
+    r += vec2(
+        sin(length(q) * 5.0 - t * 1.0),
+        cos(dist * 4.5 - t * 0.9)
+    ) * 0.4;
+    
     vec2 s = r;
-    s.x += cos(length(r) * 9.5 - iTime * 0.48) * 0.22;
-    s.y += sin(diag * 8.0 - iTime * 0.44) * 0.22;
-
+    s += vec2(
+        sin(dist * 6.5 - t * 1.2),
+        cos(length(r) * 6.0 - t * 1.1)
+    ) * 0.3;
+    
     float waves = 0.0;
-    // abs creates the sharp bright caustic lines
-    waves += abs(sin(length(q) * 12.0 - iTime * 0.62)) * 0.65;
-    waves += abs(cos(length(r) * 20.0 - iTime * 0.80)) * 0.52;
-    waves += abs(sin(length(s) * 30.0 - iTime * 0.98)) * 0.40;
-    waves += abs(cos(diag * 16.0 - iTime * 0.70)) * 0.32;
-    waves += abs(sin(cross * 22.0 - iTime * 0.86)) * 0.26;
-    waves -= abs(cos((dist * 14.0 + diag * 9.0) - iTime * 0.74)) * 0.20;
-
-    float falloff = smoothstep(5.0, 0.0, dist);
-    waves *= falloff;
-    // invert so lines are bright on dark water
-    waves = 1.0 - clamp(waves * 0.7, 0.0, 2.0);
-    waves = pow(waves, 2.5);
+    waves += sin(dist * 12.0 - t * 1.6);
+    waves += cos(length(s) * 15.0 - t * 1.9);
+    waves += sin(dist * 8.0 - t * 1.3) * 0.7;
+    
+    waves = waves * 0.13 + 0.45;
+    waves = smoothstep(0.13, 2.7, waves);
+    
     fragColor = vec4(vec3(waves), 1.0);
   }
-
   void main() {
     mainImage(gl_FragColor, gl_FragCoord.xy);
   }
@@ -79,24 +79,24 @@ export default function CardBackground() {
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-      gl.STATIC_DRAW
+      gl.STATIC_DRAW,
     );
 
     const pos = gl.getAttribLocation(prog, "position");
     gl.enableVertexAttribArray(pos);
     gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
 
-    const uRes  = gl.getUniformLocation(prog, "iResolution");
+    const uRes = gl.getUniformLocation(prog, "iResolution");
     const uTime = gl.getUniformLocation(prog, "iTime");
 
     // Use the parent element's size — it's stable during GSAP pin
     // because GSAP doesn't change the parent's layout dimensions
     const setSize = () => {
       const parent = canvas.parentElement;
-      const w = Math.round(parent.offsetWidth  * devicePixelRatio);
+      const w = Math.round(parent.offsetWidth * devicePixelRatio);
       const h = Math.round(parent.offsetHeight * devicePixelRatio);
       if (canvas.width === w && canvas.height === h) return;
-      canvas.width  = w;
+      canvas.width = w;
       canvas.height = h;
       gl.viewport(0, 0, w, h);
     };

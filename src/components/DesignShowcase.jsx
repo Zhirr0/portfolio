@@ -10,8 +10,10 @@ import scrollTriggerVideo from "/videos/scrollTriggerVideo.mp4";
 import textAnimation from "/videos/textAnimation.mp4";
 import designShowcase from "/videos/designShowcase.mp4";
 import { unlockScroll } from "../utils/screenLocker.js";
+import { useNavigate } from "react-router-dom";
 
 const DesignShowcase = () => {
+  const navigate = useNavigate();
   // Scroll-trigger logic ONLY for the pinned section
   useScrollTriggerAnimation();
   unlockScroll();
@@ -20,16 +22,25 @@ const DesignShowcase = () => {
     <div className="design-showcase">
       {/* Image Section with Pinned Scroll */}
       <div id="image-section" className="image-section">
-        <div className="image-section-container-1">
+        <div
+          className="image-section-container-1 design-showcase-card"
+          onClick={() => navigate("/animations")}
+        >
           <VideoSection title="Custom Cursor" src={designShowcase} />
         </div>
 
-        <div className="image-section-container-2">
+        <div
+          className="image-section-container-2 design-showcase-card"
+          onClick={() => navigate("/animations")}
+        >
           <h4 className="image-section-header-h4">back-to-back marquee</h4>
           <FadeoutCard />
         </div>
 
-        <div className="image-section-container-3">
+        <div
+          className="image-section-container-3 design-showcase-card"
+          onClick={() => navigate("/animations")}
+        >
           <VideoSection
             title="links hover Transition"
             src={textAnimation}
@@ -37,7 +48,10 @@ const DesignShowcase = () => {
           />
         </div>
 
-        <div className="image-section-container-4">
+        <div
+          className="image-section-container-4 design-showcase-card"
+          onClick={() => navigate("/animations")}
+        >
           <VideoSection
             title="Working With Canvas API"
             src={scrollTriggerVideo}

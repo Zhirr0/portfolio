@@ -1,6 +1,6 @@
 export const scatterTextConfig = {
   initialPosition: {
-    x: "75dvw",
+    x: "75svw",
   },
 
   splitText: {
