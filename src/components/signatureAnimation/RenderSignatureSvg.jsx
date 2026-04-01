@@ -213,7 +213,6 @@ const RenderSignatureSvg = ({ onLoadComplete }) => {
 
     const completionTimeline = gsap.timeline({
       onComplete: () => {
-        // Exit wipe
         gsap.set(containerEl, {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
         });
