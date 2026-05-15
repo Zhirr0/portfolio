@@ -6,12 +6,12 @@ export const VIEWPORT = {
 
 export const TEXTS = [
   "FRONT-END",
-  "ANIMATE",
-  "GSAP",
-  "REACT",
+  "FREELANCE",
+  "DESIGNER",
+  "DEVELOPER",
+  "CREATIVE",
   "MOTION",
-  "TYPESCRIPT",
-  "REDUX",
+  "ANIMATION",
 ];
 
 export const MOTION_PROFILES = {
